@@ -1,33 +1,49 @@
-# raw data (distributed separately; see README)
-data/
-cache/
-logs/
+# Python and local environments
 __pycache__/
 *.py[cod]
+*.so
 .venv/
 venv/
-*.pyc
-.ipynb_checkpoints/
-.pytest_cache/
+env/
+ENV/
+*.egg-info/
+.env
+.envrc
+
+# IDE and OS files
 .vscode/
 .idea/
-.env
 *.DS_Store
-*.db-journal
+.ipynb_checkpoints/
 
-# legacy project-generated data
+# Test, coverage, and build output
+.pytest_cache/
+.mypy_cache/
+.coverage*
+htmlcov/
+build/
+dist/
+
+# Raw and generated data
+data/
 data/raw/
 data/processed/
-artifacts/*.pkl
-artifacts/*.onnx
+cache/
+logs/
+results/
+report/
 reports/generated/
 experiments/logs/
 experiments/results/*
 !experiments/results/.gitkeep
 !**/.gitkeep
 
-# generated experiment outputs and model/data artifacts (keep local; regenerate as needed)
-results/
-report/
+# Generated model artifacts
 artifacts/*.joblib
+artifacts/*.pkl
+artifacts/*.onnx
 artifacts/experiment_models/
+
+# Databases and local state
+*.db-journal
+*.db

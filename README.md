@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # PathSnap — Map-Matching & Route Reconstruction (Team 32)
 
 Noisy GPS trajectories are matched to a road network:
@@ -131,3 +132,8 @@ tests/               pytest suite
 
 Sources: `results/models/comparison.csv`, `results/optuna/tuned_vs_untuned.csv`, `results/hmm/comparison.csv`
 (the untuned-model HMM run is kept in `results/hmm_untuned/`). All report tables are generated from these files.
+
+## 6. Team collaboration
+
+This repository includes the completed Team 32 pipeline and the teammate frontend/ML work merged with full Git history.
+The teammate repository is available as the `teammate` remote for historical reference.
