@@ -1,18 +1,51 @@
+# Python and local environments
 __pycache__/
 *.py[cod]
+*.so
 .venv/
 venv/
+env/
+ENV/
+*.egg-info/
 .env
-.DS_Store
+.envrc
+
+# IDE and OS files
+.vscode/
+.idea/
+*.DS_Store
+.ipynb_checkpoints/
+
+# Test, coverage, and build output
+.pytest_cache/
+.mypy_cache/
+.coverage*
+htmlcov/
+build/
+dist/
 
 # Raw and generated data
+data/
 data/raw/
 data/processed/
 Student folder/
 PathSnap_student_materials/
-artifacts/
+cache/
+logs/
+results/
+report/
 reports/generated/
 experiments/logs/
+experiments/results/*
+!experiments/results/.gitkeep
+!**/.gitkeep
 
-# Keep directory placeholders
-!.gitkeep
+# Generated model artifacts
+artifacts/*.joblib
+artifacts/*.pkl
+artifacts/*.onnx
+artifacts/experiment_models/
+
+# Databases and local state
+*.db-journal
+*.db

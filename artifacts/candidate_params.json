@@ -1,0 +1,5 @@
+{
+  "radius_m": 50.0,
+  "k": 8,
+  "densify_step_m": 10.0
+}

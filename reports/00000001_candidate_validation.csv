@@ -1,0 +1,2 @@
+trip_id,route_entries,invalid_route_ids,unique_route_arcs,unique_candidate_arcs,covered_unique_route_arcs,unique_route_coverage_pct,route_entry_coverage_pct,connected_pairs,total_pairs,route_continuity_pct
+00000001,525,0,525,3407,525,100.0,100.0,524,524,100.0

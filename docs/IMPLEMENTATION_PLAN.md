@@ -26,20 +26,26 @@ Exit criteria: the data schema and route-label alignment method are documented a
 
 ## Phase 2: Candidate generation
 
+Status: complete
+
 1. Convert coordinates to a suitable metric coordinate system.
 2. Generate the nearest `K` road-arc candidates per GPS observation.
 3. Measure candidate miss rate using training reference routes.
 4. Save candidate tables in a format that supports model training and inference.
 
-Exit criteria: candidate generation works on every training trip and has an explicit miss-rate report.
+Exit criteria: candidate generation works on every training trip and has an explicit miss-rate report. Completed with `K=24`; mean miss rate is 5.39% on training and 4.64% on student test.
 
 ## Phase 3: Feature engineering
+
+Status: in progress
 
 Create leakage-free features: point-to-segment distance, along-segment position, GPS speed, heading difference, segment length, time gaps, and previous-candidate connectivity.
 
 Exit criteria: one feature schema is shared by training and prediction code.
 
 ## Phase 4: Model comparison
+
+Status: in progress
 
 Train and compare at least five models using trip-level grouped cross-validation:
 
