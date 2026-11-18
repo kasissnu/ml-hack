@@ -12,7 +12,7 @@ This is the working plan for Person 1's ML pipeline. Update the status and recor
 
 ## Phase 1: Data loading, validation, and exploration
 
-Status: in progress
+Status: complete
 
 1. Load `.track`, `.nodes`, `.arcs`, and `.route` files with explicit schemas.
 2. Inventory trip counts, row counts, file availability, and file sizes.
@@ -22,18 +22,22 @@ Status: in progress
 6. Determine and document how route arcs align with GPS observations.
 7. Save EDA tables and representative maps under `reports/eda/`.
 
-Exit criteria: the data schema and route-label alignment method are documented and reproducible.
+Exit criteria: the data schema and route-label alignment method are documented and reproducible. Completed in the Phase 1 audit.
 
 ## Phase 2: Candidate generation
+
+Status: complete
 
 1. Convert coordinates to a suitable metric coordinate system.
 2. Generate the nearest `K` road-arc candidates per GPS observation.
 3. Measure candidate miss rate using training reference routes.
 4. Save candidate tables in a format that supports model training and inference.
 
-Exit criteria: candidate generation works on every training trip and has an explicit miss-rate report.
+Exit criteria: candidate generation works on every training trip and has an explicit miss-rate report. Completed with `K=24`; mean miss rate is 5.39% on training and 4.64% on student test.
 
 ## Phase 3: Feature engineering
+
+Status: in progress
 
 Create leakage-free features: point-to-segment distance, along-segment position, GPS speed, heading difference, segment length, time gaps, and previous-candidate connectivity.
 
