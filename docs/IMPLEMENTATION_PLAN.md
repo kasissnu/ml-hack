@@ -12,7 +12,7 @@ This is the working plan for Person 1's ML pipeline. Update the status and recor
 
 ## Phase 1: Data loading, validation, and exploration
 
-Status: in progress
+Status: complete
 
 1. Load `.track`, `.nodes`, `.arcs`, and `.route` files with explicit schemas.
 2. Inventory trip counts, row counts, file availability, and file sizes.
@@ -22,7 +22,7 @@ Status: in progress
 6. Determine and document how route arcs align with GPS observations.
 7. Save EDA tables and representative maps under `reports/eda/`.
 
-Exit criteria: the data schema and route-label alignment method are documented and reproducible.
+Exit criteria: the data schema and route-label alignment method are documented and reproducible. Completed in the Phase 1 audit.
 
 ## Phase 2: Candidate generation
 

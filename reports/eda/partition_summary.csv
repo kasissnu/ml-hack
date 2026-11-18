@@ -1,0 +1,3 @@
+partition,trips,gps_rows,route_rows,isolated_nodes_mean,weak_components_mean,route_transition_breaks_total,midpoint_distance_median_mean,midpoint_distance_p95_mean,monotonic_fraction_mean,route_coverage_mean
+student_test,10,19160,3477,0.0,22.7,1,27.887538504205544,139.73948864846164,0.9715421471826279,0.9045908405413904
+train,80,208417,31336,0.0,39.0125,13,25.69831270099877,118.35667875481644,0.9752579348325217,0.9112133581330749
