@@ -1,0 +1,3 @@
+observation_id,label_arc_id,reference_distance_m,min_candidate_distance_m,max_candidate_distance_m,positive_candidates,candidate_count
+1099,43130,27.226158789902765,7.558459970310517,15.648931939204271,0,8
+1140,96510,7.159513456010604,1.0751709212449099,3.3567234407868654,0,8
