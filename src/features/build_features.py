@@ -69,9 +69,9 @@ def add_features(trip: TripData, candidates: pd.DataFrame) -> pd.DataFrame:
 
 
 def split_features_and_label(candidates: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
-    """Return model inputs and the provisional reference-arc target separately."""
+    """Return model inputs and the binary candidate-correctness target separately."""
 
     missing = [column for column in FEATURE_COLUMNS if column not in candidates]
     if missing:
         raise ValueError(f"Missing feature columns: {missing}")
-    return candidates[FEATURE_COLUMNS].copy(), candidates["reference_arc_id"].copy()
+    return candidates[FEATURE_COLUMNS].copy(), candidates["reference_in_candidates"].astype(int).copy()

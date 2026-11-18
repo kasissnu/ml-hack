@@ -13,6 +13,8 @@ artifacts/*.pkl
 artifacts/*.onnx
 reports/generated/
 experiments/logs/
+experiments/results/*
+!experiments/results/.gitkeep
 
 # Keep directory placeholders
 !.gitkeep
