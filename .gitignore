@@ -8,9 +8,9 @@ venv/
 # Raw and generated data
 data/raw/
 data/processed/
-artifacts/*.joblib
-artifacts/*.pkl
-artifacts/*.onnx
+Student folder/
+PathSnap_student_materials/
+artifacts/
 reports/generated/
 experiments/logs/
 
