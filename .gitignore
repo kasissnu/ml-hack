@@ -1,20 +1,33 @@
+# raw data (distributed separately; see README)
+data/
+cache/
+logs/
 __pycache__/
 *.py[cod]
 .venv/
 venv/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+.vscode/
+.idea/
 .env
-.DS_Store
+*.DS_Store
+*.db-journal
 
-# Raw and generated data
+# legacy project-generated data
 data/raw/
 data/processed/
-artifacts/*.joblib
 artifacts/*.pkl
 artifacts/*.onnx
 reports/generated/
 experiments/logs/
 experiments/results/*
 !experiments/results/.gitkeep
+!**/.gitkeep
 
-# Keep directory placeholders
-!.gitkeep
+# generated experiment outputs and model/data artifacts (keep local; regenerate as needed)
+results/
+report/
+artifacts/*.joblib
+artifacts/experiment_models/

@@ -1,0 +1,35 @@
+# PathSnap global configuration. All scripts read from here.
+seed: 42
+
+paths:
+  data_root: data            # contains train/, student_test/, eval/
+  cache: cache
+  results: results
+  artifacts: artifacts
+  logs: logs
+
+partitions:
+  train: train
+  student_test: student_test
+  eval: eval
+
+geo:
+  earth_radius_m: 6371008.8
+
+cleaning:
+  max_speed_mps: 70.0        # implied speed above this flags a GPS outlier
+  gap_flags_s: [5, 30, 60]   # thresholds reported in EDA
+
+labels:
+  max_match_dist_m: 40.0     # GPS point farther than this from the reference route -> unmatched (-1)
+  band_m: 100.0              # only route arcs within this distance are feasible in the alignment DP
+  heading_lambda_m: 5.0      # heading penalty weight (metres-equivalent) in label alignment
+  min_speed_for_heading: 2.0
+
+candidates:
+  radius_m: 50.0
+  k: 8
+  densify_step_m: 10.0
+
+cv:
+  n_folds: 5
