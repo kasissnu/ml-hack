@@ -129,9 +129,10 @@ def build_training_data(
                 "candidate_miss_rate": float(1.0 - candidates.groupby("observation_index")["reference_in_candidates"].any().mean()),
             }
         )
-    features = pd.concat(feature_frames, ignore_index=True)
-    targets = pd.concat(labels, ignore_index=True)
+    features = pd.concat(feature_frames, ignore_index=True).astype("float32")
+    targets = pd.concat(labels, ignore_index=True).astype("int8")
     group_series = pd.concat(groups, ignore_index=True)
+    del feature_frames, labels, groups
     if config.max_training_rows is not None and len(features) > config.max_training_rows:
         rng = np.random.default_rng(config.random_state)
         positive_indices = np.flatnonzero(targets.to_numpy() == 1)
