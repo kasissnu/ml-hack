@@ -45,6 +45,8 @@ Exit criteria: one feature schema is shared by training and prediction code.
 
 ## Phase 4: Model comparison
 
+Status: in progress
+
 Train and compare at least five models using trip-level grouped cross-validation:
 
 1. Logistic Regression

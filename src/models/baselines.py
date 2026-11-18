@@ -24,9 +24,10 @@ from features.candidates import generate_candidates
 @dataclass(frozen=True)
 class TrainingConfig:
     k: int = 24
-    negative_ratio: int = 5
+    negative_ratio: int = 3
     cv_folds: int = 5
     random_state: int = 32
+    max_training_rows: int | None = 600_000
 
 
 def make_model(name: str, random_state: int = 32):
@@ -47,11 +48,11 @@ def make_model(name: str, random_state: int = 32):
         )
     if name == "random_forest":
         return RandomForestClassifier(
-            n_estimators=250,
-            max_depth=24,
-            min_samples_leaf=2,
+            n_estimators=20,
+            max_depth=12,
+            min_samples_leaf=5,
             class_weight="balanced_subsample",
-            n_jobs=-1,
+            n_jobs=1,
             random_state=random_state,
         )
     raise ValueError(f"Unknown model: {name}")
@@ -71,6 +72,24 @@ def _sample_training_candidates(candidates: pd.DataFrame, negative_ratio: int, r
     return pd.concat(rows, ignore_index=True) if rows else candidates.iloc[0:0].copy()
 
 
+def _cap_trip_rows(candidates: pd.DataFrame, max_rows: int, rng: np.random.Generator) -> pd.DataFrame:
+    if len(candidates) <= max_rows:
+        return candidates
+    positives = candidates[candidates["reference_in_candidates"]]
+    negatives = candidates[~candidates["reference_in_candidates"]]
+    positive_budget = min(len(positives), max_rows // 4)
+    negative_budget = max_rows - positive_budget
+    positive_sample = positives.sample(
+        n=positive_budget,
+        random_state=int(rng.integers(0, 2**31 - 1)),
+    )
+    negative_sample = negatives.sample(
+        n=min(len(negatives), negative_budget),
+        random_state=int(rng.integers(0, 2**31 - 1)),
+    )
+    return pd.concat([positive_sample, negative_sample], ignore_index=True)
+
+
 def build_training_data(
     partition: str = "train",
     data_root: str | Path | None = None,
@@ -80,6 +99,9 @@ def build_training_data(
     root = resolve_data_root(data_root)
     ids = trip_ids or list_trip_ids(partition, root)
     rng = np.random.default_rng(config.random_state)
+    per_trip_limit = None
+    if config.max_training_rows is not None:
+        per_trip_limit = max(1000, config.max_training_rows // max(len(ids), 1))
     feature_frames: list[pd.DataFrame] = []
     labels: list[pd.Series] = []
     groups: list[pd.Series] = []
@@ -88,6 +110,8 @@ def build_training_data(
         trip = load_trip(trip_id, partition, root)
         candidates = generate_candidates(trip, k=config.k)
         sampled = _sample_training_candidates(candidates, config.negative_ratio, rng)
+        if per_trip_limit is not None:
+            sampled = _cap_trip_rows(sampled, per_trip_limit, rng)
         if sampled.empty:
             continue
         enriched = add_features(trip, sampled)
@@ -105,12 +129,22 @@ def build_training_data(
                 "candidate_miss_rate": float(1.0 - candidates.groupby("observation_index")["reference_in_candidates"].any().mean()),
             }
         )
-    return (
-        pd.concat(feature_frames, ignore_index=True),
-        pd.concat(labels, ignore_index=True),
-        pd.concat(groups, ignore_index=True),
-        pd.DataFrame(summaries),
-    )
+    features = pd.concat(feature_frames, ignore_index=True)
+    targets = pd.concat(labels, ignore_index=True)
+    group_series = pd.concat(groups, ignore_index=True)
+    if config.max_training_rows is not None and len(features) > config.max_training_rows:
+        rng = np.random.default_rng(config.random_state)
+        positive_indices = np.flatnonzero(targets.to_numpy() == 1)
+        negative_indices = np.flatnonzero(targets.to_numpy() == 0)
+        positive_budget = min(len(positive_indices), config.max_training_rows // 4)
+        negative_budget = config.max_training_rows - positive_budget
+        selected_positive = rng.choice(positive_indices, size=positive_budget, replace=False)
+        selected_negative = rng.choice(negative_indices, size=min(len(negative_indices), negative_budget), replace=False)
+        selected = np.sort(np.r_[selected_positive, selected_negative])
+        features = features.iloc[selected].reset_index(drop=True)
+        targets = targets.iloc[selected].reset_index(drop=True)
+        group_series = group_series.iloc[selected].reset_index(drop=True)
+    return features, targets, group_series, pd.DataFrame(summaries)
 
 
 def _score_predictions(model, enriched: pd.DataFrame) -> dict[str, float]:
@@ -200,5 +234,9 @@ def train_and_evaluate(
     result_frame["student_test_log_loss"] = student_scores["candidate_log_loss"]
     result_frame["student_test_candidate_miss_rate"] = student_scores["candidate_miss_rate"]
     result_frame["final_train_seconds"] = final_train_seconds
+    result_frame["k"] = config.k
+    result_frame["negative_ratio"] = config.negative_ratio
+    result_frame["cv_folds"] = config.cv_folds
+    result_frame["max_training_rows"] = config.max_training_rows
     result_frame.to_csv(result_path / f"{model_name}_results.csv", index=False)
     return result_frame
